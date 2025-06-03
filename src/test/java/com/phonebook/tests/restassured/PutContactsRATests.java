@@ -106,6 +106,27 @@ public class PutContactsRATests extends TestBase {
                 .assertThat().body("message", containsString("not found in your contacts!"));
     }
 
+    @Test
+    public void putContactUnathorizedNegativeTest() {
+        UpdateContactDto updatedContact = UpdateContactDto.builder()
+                .id(id)
+                .name("Mister")
+                .lastName("Twister")
+                .email("twister@test.com")
+                .phone("9876543210")
+                .address("London")
+                .description("etwas")
+                .build();
+
+        given()
+                .body(updatedContact)
+                .contentType(ContentType.JSON)
+                .when()
+                .put("contacts")
+                .then()
+                .assertThat().statusCode(403);
+    }
+
     @AfterMethod
     public void deleteContact() {
         given()
